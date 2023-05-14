@@ -1,7 +1,13 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import BookCard from "./BookCard";
 
 const AllBooks = () => {
+  const [allBooks, setAllBooks] = useState([]);
+  useEffect(() => {
+    fetch("http://localhost:5000/allBooks")
+      .then((res) => res.json())
+      .then((data) => setAllBooks(data));
+  }, []);
   return (
     <div className="container mt-5">
       <div className="m-auto" style={{ width: "max-content" }}>
@@ -28,16 +34,15 @@ const AllBooks = () => {
             <option value="2">Two</option>
             <option value="3">Three</option>
           </select>
-          <label className="input-group-text" for="inputGroupSelect02">
+          <label className="input-group-text" htmlFor="inputGroupSelect02">
             Options
           </label>
         </div>
       </div>
       <div className="row row-cols-1 row-cols-md-3 g-4">
-        <BookCard />
-        <BookCard />
-        <BookCard />
-        <BookCard />
+        {allBooks.map((book) => (
+          <BookCard key={book._id} book={book} />
+        ))}
       </div>
       <nav aria-label="Page navigation example m-auto text-center">
         <ul className="pagination justify-content-center">
